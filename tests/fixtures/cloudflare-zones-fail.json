@@ -1,0 +1,20 @@
+{
+  "fetched_at": "2026-06-08T20:00:00Z",
+  "zones": [
+    {
+      "name": "legacy.acme.com",
+      "compliant": false,
+      "reason": "DNSSEC is disabled, policy requires active",
+      "detail": {
+        "id": "z9",
+        "status": "active",
+        "dnssec": "disabled",
+        "min_tls_version": "1.0",
+        "ssl_mode": "flexible",
+        "paused": false,
+        "plan": "Free",
+        "type": "full"
+      }
+    }
+  ]
+}

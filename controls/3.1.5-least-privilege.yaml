@@ -1,0 +1,59 @@
+apiVersion: concord.dev/v1
+kind: Control
+
+metadata:
+  id: NIST-800-171-3.1.5
+  name: least-privilege
+  title: Employ the principle of least privilege, including for privileged accounts
+  framework: nist-800-171
+  category: Access Control (3.1)
+  severity: high
+  tags:
+    - access-control
+    - least-privilege
+    - access-review
+  owners:
+    - team: security
+
+spec:
+  description: |
+    NIST SP 800-171 Rev 2 §3.1.5 requires the organization to employ
+    the principle of least privilege. The mechanical evidence Concord
+    collects is a documented, current access-review cadence — if the
+    organization is reviewing access on schedule, role over-grant is
+    being caught and remediated.
+
+  rationale: |
+    Vendored from SOC 2 CC6.2. The "most recent access-review document
+    is within max_age_days" check satisfies §3.1.5 (privileges are
+    reviewed) and §3.1.7 (changes are tracked).
+
+  evidence:
+    - id: access_reviews
+      source: github
+      type: file_glob
+      fixture: ../tests/fixtures/cc6.2-reviews-pass.json
+      params:
+        repo: ${env.CONCORD_REPO}
+
+  policy:
+    engine: rego
+    package: concord.soc2.cc6_2
+    file: ../policies/cc6_2.rego
+
+  mappings:
+    nist_800_171:
+      - "3.1.5"
+      - "3.1.7"
+    nist_800_53:
+      - "AC-2"
+      - "AC-6"
+    soc2:
+      - "CC6.2"
+      - "CC6.3"
+    cmmc:
+      - "AC.L2-3.1.5"
+      - "AC.L2-3.1.7"
+
+  status: stable
+  blocking: true

@@ -1,0 +1,61 @@
+apiVersion: concord.dev/v1
+kind: Control
+
+metadata:
+  id: NIST-800-171-3.5.3
+  name: multifactor-authentication
+  title: Use multifactor authentication for local and network access to privileged accounts and for network access to non-privileged accounts
+  framework: nist-800-171
+  category: Identification and Authentication (3.5)
+  severity: critical
+  tags:
+    - mfa
+    - identity
+  owners:
+    - team: security
+
+spec:
+  description: |
+    NIST SP 800-171 Rev 2 §3.5.3 requires multifactor authentication
+    for local and network access to privileged accounts and for
+    network access to non-privileged accounts. The Concord
+    implementation enforces strong MFA (TOTP, push, WebAuthn, or
+    hardware token) on every active IdP user — covering both
+    populations.
+
+  rationale: |
+    Same evidence and policy as §3.1.1 — the strong-MFA invariant is
+    stricter than what §3.5.3 alone would require because we exclude
+    SMS / phone-call / email factors (weak channels). The crosswalk
+    to §3.5.4 (cryptographic MFA) is also satisfied because TOTP /
+    WebAuthn / hardware tokens are all cryptographic.
+
+  evidence:
+    - id: okta_users
+      source: okta
+      type: users_mfa
+      fixture: ../tests/fixtures/cc6.1-okta-pass.json
+      params:
+        org_url: ${env.OKTA_ORG_URL}
+
+  policy:
+    engine: rego
+    package: concord.soc2.cc6_1
+    file: ../policies/cc6_1.rego
+
+  mappings:
+    nist_800_171:
+      - "3.5.3"
+      - "3.5.4"
+    nist_800_53:
+      - "IA-2(1)"
+      - "IA-2(2)"
+      - "IA-2(11)"
+    soc2:
+      - "CC6.1"
+    cmmc:
+      - "IA.L2-3.5.3"
+      - "IA.L2-3.5.4"
+
+  status: stable
+  blocking: true

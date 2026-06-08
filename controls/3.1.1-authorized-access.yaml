@@ -1,0 +1,59 @@
+apiVersion: concord.dev/v1
+kind: Control
+
+metadata:
+  id: NIST-800-171-3.1.1
+  name: authorized-access
+  title: Limit information system access to authorized users
+  framework: nist-800-171
+  category: Access Control (3.1)
+  severity: critical
+  tags:
+    - access-control
+    - mfa
+  owners:
+    - team: security
+
+spec:
+  description: |
+    NIST SP 800-171 Rev 2 §3.1.1 requires the organization to limit
+    system access to authorized users, processes acting on behalf of
+    authorized users, or devices (including other systems). Concord
+    evidences this by reading IdP active-user state and requiring
+    strong MFA for every active user.
+
+  rationale: |
+    Vendored from SOC 2 CC6.1. The "every active IdP user has strong
+    MFA" invariant satisfies §3.1.1 (authorized users) + §3.5.3 (MFA
+    for non-privileged accounts) simultaneously — one ceremony, two
+    NIST 800-171 controls.
+
+  evidence:
+    - id: okta_users
+      source: okta
+      type: users_mfa
+      fixture: ../tests/fixtures/cc6.1-okta-pass.json
+      params:
+        org_url: ${env.OKTA_ORG_URL}
+
+  policy:
+    engine: rego
+    package: concord.soc2.cc6_1
+    file: ../policies/cc6_1.rego
+
+  mappings:
+    nist_800_171:
+      - "3.1.1"
+      - "3.1.2"
+    nist_800_53:
+      - "AC-2"
+      - "AC-3"
+      - "IA-2"
+    soc2:
+      - "CC6.1"
+    cmmc:
+      - "AC.L2-3.1.1"
+      - "AC.L2-3.1.2"
+
+  status: stable
+  blocking: true

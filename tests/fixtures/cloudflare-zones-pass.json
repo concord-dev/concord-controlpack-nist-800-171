@@ -1,0 +1,33 @@
+{
+  "fetched_at": "2026-06-08T20:00:00Z",
+  "zones": [
+    {
+      "name": "acme.com",
+      "compliant": true,
+      "detail": {
+        "id": "z1",
+        "status": "active",
+        "dnssec": "active",
+        "min_tls_version": "1.3",
+        "ssl_mode": "strict",
+        "paused": false,
+        "plan": "Pro",
+        "type": "full"
+      }
+    },
+    {
+      "name": "api.acme.com",
+      "compliant": true,
+      "detail": {
+        "id": "z2",
+        "status": "active",
+        "dnssec": "active",
+        "min_tls_version": "1.2",
+        "ssl_mode": "strict",
+        "paused": false,
+        "plan": "Pro",
+        "type": "full"
+      }
+    }
+  ]
+}

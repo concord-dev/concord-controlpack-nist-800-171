@@ -1,0 +1,26 @@
+{
+  "fetched_at": "2026-05-14T10:00:00Z",
+  "org_url": "https://acme.okta.com",
+  "users": [
+    {
+      "id": "00u1",
+      "email": "alice@acme.com",
+      "name": "Alice",
+      "login": "alice@acme.com",
+      "status": "ACTIVE",
+      "factors": [
+        {"type": "sms", "provider": "OKTA", "status": "ACTIVE"}
+      ],
+      "has_strong_mfa": false
+    },
+    {
+      "id": "00u2",
+      "email": "bob@acme.com",
+      "name": "Bob",
+      "login": "bob@acme.com",
+      "status": "ACTIVE",
+      "factors": [],
+      "has_strong_mfa": false
+    }
+  ]
+}

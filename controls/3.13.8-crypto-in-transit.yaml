@@ -1,0 +1,59 @@
+apiVersion: concord.dev/v1
+kind: Control
+
+metadata:
+  id: NIST-800-171-3.13.8
+  name: crypto-in-transit
+  title: Implement cryptographic mechanisms to prevent unauthorized disclosure of CUI during transmission
+  framework: nist-800-171
+  category: System and Communications Protection (3.13)
+  severity: high
+  tags:
+    - cryptography
+    - tls
+    - cloudflare
+  owners:
+    - team: security
+
+spec:
+  description: |
+    NIST SP 800-171 Rev 2 §3.13.8 requires cryptographic mechanisms
+    to prevent unauthorized disclosure of CUI during transmission.
+    For internet-facing services this means TLS 1.2 or higher and
+    encrypted origin traffic. Concord evaluates the Cloudflare edge
+    configuration as the transmission boundary control point.
+
+  rationale: |
+    Wires the new concord-plugin-cloudflare evidence (zone DNSSEC +
+    min_tls_version + ssl_mode) into NIST 800-171. The policy enforces
+    the configured floor (default TLS 1.2) and rejects ssl_mode=off /
+    flexible, both of which permit unencrypted origin traffic.
+
+  evidence:
+    - id: cloudflare_zones
+      source: cloudflare
+      type: cloudflare_zones
+      fixture: ../tests/fixtures/cloudflare-zones-pass.json
+      params:
+        require_dnssec: true
+        min_tls_version: "1.2"
+
+  policy:
+    engine: rego
+    package: concord.nist_800_171.crypto_in_transit
+    file: ../policies/cloudflare_tls.rego
+
+  mappings:
+    nist_800_171:
+      - "3.13.8"
+      - "3.13.15"
+    nist_800_53:
+      - "SC-8"
+      - "SC-8(1)"
+      - "SC-23"
+    cmmc:
+      - "SC.L2-3.13.8"
+      - "SC.L2-3.13.15"
+
+  status: stable
+  blocking: true
